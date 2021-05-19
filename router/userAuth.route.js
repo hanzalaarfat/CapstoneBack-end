@@ -1,10 +1,30 @@
 const exprss = require("express");
 const router = exprss.Router();
 const userAutcontroller = require("../controller/userAut.controller");
+// const authenticate = require("../middleware/authenticate");
 
-router.post("/signup", userAutcontroller.signup);
-router.post("/login", userAutcontroller.login);
-router.post("/update", userAutcontroller.updateProfile);
-router.get("/:id/edit", userAutcontroller.edit);
+const { requireSignin } = require("../middleware/authenticate");
+
+const {
+  validateSignupRequest,
+  validateSigninRequest,
+  isRequestValidated,
+} = require("../validator/auth.valditor");
+
+router.post(
+  "/signup",
+  validateSignupRequest,
+  isRequestValidated,
+  userAutcontroller.signup
+);
+router.post(
+  "/login",
+  validateSigninRequest,
+  isRequestValidated,
+  userAutcontroller.login
+);
+router.get("/alluser", userAutcontroller.getallUser);
+router.post("/update", requireSignin, userAutcontroller.updateProfile);
+router.get("/:id/edit", requireSignin, userAutcontroller.edit);
 
 module.exports = router;

@@ -1,9 +1,16 @@
 const exprss = require("express");
 const router = exprss.Router();
 const doctorAutcontroller = require("../controller/aut.controller");
+const {
+  requireSigninDoctor,
+  doctorMiddleware,
+} = require("../middleware/authenticate");
 
-router.post("/signup", doctorAutcontroller.signup);
-router.post("/login", doctorAutcontroller.login);
-router.post("/update", doctorAutcontroller.updateProfile);
+const { validateSignupRequest, validateSigninRequest,isRequestValidated } = require("../validator/auth.valditor")
+
+router.post("/signup",validateSignupRequest,isRequestValidated, doctorAutcontroller.signup);
+router.post("/login",validateSigninRequest,isRequestValidated, doctorAutcontroller.login);
+router.post("/update", requireSigninDoctor, doctorAutcontroller.updateProfile);
+router.get("/alldoctor",requireSigninDoctor,  doctorAutcontroller.getAllDoctor);
 
 module.exports = router;

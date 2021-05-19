@@ -6,68 +6,93 @@ const Doctor = require("../model/aut.model");
 
 ///////////////////////////////// sigin up   /////////
 
-exports.signup = async (req, res) => {
-  const { name, email, password, cpassword } = req.body;
-  if ((!name || !email, !password || !cpassword)) {
-    return res.status(422).json({ err: "plz filled properly" });
-  }
+exports.signup = (req, res) => {
+  console.log(req.body.email);
+  Doctor.findOne({ email: req.body.email }).exec((error, user) => {
+    if (user)
+      return res.status(400).json({
+        message: "User already registered",
+      });
+    const { name, email, password, cpassword } = req.body;
 
-  ///////////////////////////////// async await or  /////////
-  try {
-    const doctorExist = await Doctor.findOne({ email: email });
-    if (doctorExist) {
-      console.log(doctorExist);
-      return res.status(422).json({ error: "Email alreday Exist" });
-    }
     const doctor = new Doctor({
       name,
       email,
       password,
-      cpassword,
     });
-    /// pre save password hashing in user schema
-    const doctorRegister = await doctor.save();
-    if (doctorRegister) {
-      res.status(201).json({ message: "doctor resgister successfuly" });
-    } else {
-      res.status(500).json({ error: "Faild to register" });
-    }
-  } catch (err) {
-    console.log(err);
-  }
+    console.log(doctor);
+    doctor.save((error, data) => {
+      if (error) {
+        return res.status(400).json({
+          message: "Something went wrong ",
+          error,
+        });
+      }
+      if (data) {
+        return res.status(201).json({
+          user: data,
+        });
+      }
+    });
+  });
 };
+
+/////////////////// login ///////////
 
 exports.login = async (req, res) => {
-  try {
-    let token;
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(422).json({ err: "plz fill data properly" });
+  let token;
+
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(422).json({ err: "plz fill data properly" });
+  }
+
+  Doctor.findOne({ email: email }).exec((err, user) => {
+    if (err) {
+      return res.status(400).json({ err });
     }
-    const userlogin = await Doctor.findOne({ email: email });
-    if (userlogin) {
-      const isMatch = await bcrypt.compare(password, userlogin.password);
-
-      token = await userlogin.generateAuthToken();
-      console.log(token);
-
-      res.cookie("jwtoken", token, {
-        expires: new Date(Date.now() + 25892000000), /// expiry token time 1 month
-        httpOnly: true,
-      });
-
-      if (!isMatch) {
-        res.status(400).json({ error: "Invalid credentials : password " });
+    if (user) {
+      if (user.authenticate(password)) {
+        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
+          expiresIn: "1h",
+        });
+        const { _id, email, name } = user;
+        res.status(200).json({ token, _id, email, name });
       } else {
-        res.json({ message: "signin successful" });
+        return res.status(401).json({
+          message: "incoreet usr or email",
+        });
       }
     } else {
-      res.status(400).json({ error: "Invalid Credentials : email" });
+      return res.status(400).send({ message: "email or password wrong" });
     }
-  } catch (err) {
-    console.log(err);
-  }
+  });
 };
+
+//   const userlogin = await Doctor.findOne({ email: email });
+//   if (userlogin) {
+//     const isMatch = await bcrypt.compare(password, userlogin.password);
+
+//     token = await userlogin.generateAuthToken();
+//     console.log(token);
+
+//     res.cookie("jwtoken", token, {
+//       expires: new Date(Date.now() + 25892000000), /// expiry token time 1 month
+//       httpOnly: true,
+//     });
+
+//     if (!isMatch) {
+//       res.status(400).json({ error: "Invalid credentials : password " });
+//     } else {
+//       res.json({ message: "signin successful" });
+//     }
+//   } else {
+//     res.status(400).json({ error: "Invalid Credentials : email" });
+//   }
+// } catch (err) {
+//   console.log(err);
+// }
+// };
 
 ///////////////////////////////// doctor Update Profile  /////////
 
@@ -109,5 +134,14 @@ exports.updateProfile = async (req, res) => {
 };
 
 exports.getAllDoctor = async (req, res) => {
-  const doctors = await Doctor.find();
+  try {
+    const doctors = await Doctor.find({});
+    if (doctors) {
+      res.status(200).json({ details: doctors });
+    } else {
+      res.status(401).json({ err: "Not Fount doctor list" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };
