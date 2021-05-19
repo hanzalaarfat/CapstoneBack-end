@@ -39,10 +39,6 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  cpassword: {
-    type: String,
-    required: true,
-  },
   state: {
     type: String,
     // required: true,

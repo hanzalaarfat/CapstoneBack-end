@@ -7,7 +7,7 @@ dotenv.config();
 
 exports.signup = async (req, res) => {
   const { name, email, password, cpassword } = req.body;
-  if ((!name || !email, !password || !cpassword)) {
+  if ((!name || !email, !password)) {
     return res.status(422).json({ err: "plz filled properly" });
   }
 
@@ -22,7 +22,6 @@ exports.signup = async (req, res) => {
       name,
       email,
       password,
-      cpassword,
     });
     /// pre save password hashing in user schema
     const userRegister = await user.save();
