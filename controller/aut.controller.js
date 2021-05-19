@@ -3,6 +3,8 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Doctor = require("../model/aut.model");
+const dotenv = require("dotenv");
+dotenv.config();
 
 ///////////////////////////////// sigin up   /////////
 

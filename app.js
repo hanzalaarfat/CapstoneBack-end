@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.get("/", requireSigninDoctor, (req, res) => {
+app.get("/", (req, res) => {
   console.log(req.user);
   res.send("hello world");
 });
