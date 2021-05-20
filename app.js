@@ -8,6 +8,7 @@ const doctorRoutes = require("./router/aut.route");
 const userRoutes = require("./router/userAuth.route");
 const appointmentRoutes = require("./router/appointment.route");
 const Drcategory = require("./router/DrCategoryRoute");
+const hospitalRoutes = require("./router/hospitalRoute");
 const cookieparser = require("cookie-parser");
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use("/doctor", doctorRoutes);
 app.use("/user", userRoutes);
 app.use("/appointment", appointmentRoutes);
 app.use("/category", Drcategory);
+app.use("/hospital", hospitalRoutes);
 
 app.use(function (req, res, next) {
   var err = new Error("Not Found");
