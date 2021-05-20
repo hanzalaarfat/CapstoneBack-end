@@ -16,6 +16,7 @@ const appointmentSchema = new Schema({
   phone: Number,
   slots: { type: ObjectId, ref: "Slot" },
   created_at: Date,
-});
+}, { timestamps: true }
+);
 const Appointment = model("Appointment", appointmentSchema);
 module.exports = Appointment;

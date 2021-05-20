@@ -3,6 +3,10 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Doctor = require("../model/aut.model");
+
+const Drcategory = require("../model/drCategoryModel");
+const slugify = require("slugify");
+const shortid = require("shortid");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -15,12 +19,14 @@ exports.signup = (req, res) => {
       return res.status(400).json({
         message: "User already registered",
       });
-    const { name, email, password } = req.body;
+    const { name, email, password, category } = req.body;
 
     const doctor = new Doctor({
       name,
+      slug: slugify(name),
       email,
       password,
+      category,
     });
     console.log(doctor);
     doctor.save((error, data) => {
@@ -146,4 +152,25 @@ exports.getAllDoctor = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+exports.getBySlug = (req, res) => {
+  const { slug } = req.params;
+  Drcategory.findOne({ slug: slug })
+    .select("_id type")
+    .exec((error, category) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+
+      if (category) {
+        Doctor.find({ category: category._id }).exec((error, doctor) => {
+          if (error) {
+            return res.status(400).json({ error });
+          } else {
+            res.status(200).json({ doctor });
+          }
+        });
+      }
+    });
 };

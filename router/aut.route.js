@@ -6,11 +6,26 @@ const {
   doctorMiddleware,
 } = require("../middleware/authenticate");
 
-const { validateSignupRequest, validateSigninRequest,isRequestValidated } = require("../validator/auth.valditor")
+const {
+  validateSignupRequest,
+  validateSigninRequest,
+  isRequestValidated,
+} = require("../validator/auth.valditor");
 
-router.post("/signup",validateSignupRequest,isRequestValidated, doctorAutcontroller.signup);
-router.post("/login",validateSigninRequest,isRequestValidated, doctorAutcontroller.login);
+router.post(
+  "/signup",
+  validateSignupRequest,
+  isRequestValidated,
+  doctorAutcontroller.signup
+);
+router.post(
+  "/login",
+  validateSigninRequest,
+  isRequestValidated,
+  doctorAutcontroller.login
+);
 router.post("/update", requireSigninDoctor, doctorAutcontroller.updateProfile);
-router.get("/alldoctor",requireSigninDoctor,  doctorAutcontroller.getAllDoctor);
+router.get("/alldoctor", requireSigninDoctor, doctorAutcontroller.getAllDoctor);
+router.get("/doctor/:slug", doctorAutcontroller.getBySlug);
 
 module.exports = router;

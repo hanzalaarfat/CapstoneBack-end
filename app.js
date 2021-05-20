@@ -7,7 +7,7 @@ var cors = require("cors");
 const doctorRoutes = require("./router/aut.route");
 const userRoutes = require("./router/userAuth.route");
 const appointmentRoutes = require("./router/appointment.route");
-const { requireSigninDoctor } = require("./middleware/authenticate");
+const Drcategory = require("./router/DrCategoryRoute");
 const cookieparser = require("cookie-parser");
 
 dotenv.config();
@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 app.use("/doctor", doctorRoutes);
 app.use("/user", userRoutes);
 app.use("/appointment", appointmentRoutes);
+app.use("/category", Drcategory);
 
 app.use(function (req, res, next) {
   var err = new Error("Not Found");

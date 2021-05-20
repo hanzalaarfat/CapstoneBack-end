@@ -2,45 +2,48 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-
-  phone: {
-    type: Number,
-    // required: true,
-  },
-  hash_password: {
-    type: String,
-    required: true,
-  },
-  state: {
-    type: String,
-    // required: true,
-  },
-  city: {
-    type: String,
-    // required: true,
-  },
-  address: {
-    type: String,
-    // required: true,
-  },
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true,
-      },
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-  ],
-});
+    email: {
+      type: String,
+      required: true,
+    },
+
+    phone: {
+      type: Number,
+      // required: true,
+    },
+    hash_password: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      // required: true,
+    },
+    city: {
+      type: String,
+      // required: true,
+    },
+    address: {
+      type: String,
+      // required: true,
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 userSchema.virtual("password").set(function (password) {
   this.hash_password = bcrypt.hashSync(password, 10);

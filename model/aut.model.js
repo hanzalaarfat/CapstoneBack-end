@@ -2,64 +2,74 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const doctorSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  available: {
-    type: Boolean,
-    // required: true,
-  },
-  timing: {
-    type: String,
-  },
-  days: [
-    {
+const doctorSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    available: {
+      type: Boolean,
+      // required: true,
+    },
+    timing: {
       type: String,
     },
-  ],
-  phone: {
-    type: Number,
-    // required: true,
-  },
-  specialist: {
-    type: String,
-    // required: true,
-  },
-  // password: {
-  //   type: String,
-  //   required: true,
-  // },
-  hash_password: {
-    type: String,
-    required: true,
-  },
-  state: {
-    type: String,
-    // required: true,
-  },
-  city: {
-    type: String,
-    // required: true,
-  },
-  address: {
-    type: String,
-    // required: true,
-  },
-  tokens: [
-    {
-      token: {
+    days: [
+      {
         type: String,
-        required: true,
       },
+    ],
+    phone: {
+      type: Number,
+      // required: true,
     },
-  ],
-});
+    specialist: {
+      type: String,
+      // required: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    hash_password: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      // required: true,
+    },
+    city: {
+      type: String,
+      // required: true,
+    },
+    address: {
+      type: String,
+      // required: true,
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Drcategory",
+      required: true,
+    },
+  },
+
+  { timestamps: true }
+);
 
 doctorSchema.virtual("password").set(function (password) {
   this.hash_password = bcrypt.hashSync(password, 10);
