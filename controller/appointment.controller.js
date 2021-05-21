@@ -4,7 +4,7 @@ const Slot = require("../model/slot.model");
 console.log(Appointment);
 const dotenv = require("dotenv");
 dotenv.config();
-const Vonage = require("@vonage/server-sdk");
+const Vonage = require("@vonage/server-sdk"); // for send messaging
 (exports.all = (req, res) => {
   // Returns all appointments
   Appointment.find({}).exec((err, appointments) => res.json(appointments));

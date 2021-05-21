@@ -145,7 +145,9 @@ exports.getAllDoctor = async (req, res) => {
   try {
     const doctors = await Doctor.find({});
     if (doctors) {
-      res.status(200).json({ details: doctors });
+      // console.log("doctor count :", doctors.length);
+      let totalDoctor = doctors.length;
+      res.status(200).json({ totalDoctor: totalDoctor, details: doctors });
     } else {
       res.status(401).json({ err: "Not Fount doctor list" });
     }

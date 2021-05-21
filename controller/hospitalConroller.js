@@ -50,7 +50,8 @@ exports.getAllHospital = async (req, res) => {
   try {
     const hospital = await Hospital.find({});
     if (hospital) {
-      res.status(200).json({ hospital: hospital });
+      let totalHospital = hospital.length;
+      res.status(200).json({ totalHospital, hospital });
     } else {
       res.status(401).json({ err: "Not Fount Hospital list" });
     }
