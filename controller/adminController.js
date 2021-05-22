@@ -53,8 +53,8 @@ exports.login = async (req, res) => {
     }
     if (admin) {
       if (admin.authenticate(password)) {
-        const token = jwt.sign({ _id: admin._id }, process.env.SECRET_KEY, {
-          expiresIn: "1h",
+        const token = jwt.sign({ _id: admin._id }, process.env.SECRET_KEY_ADMIN, {
+          expiresIn: "24h",
         });
         const { _id, email, name } = admin;
         res.status(200).json({ token, _id, email, name });

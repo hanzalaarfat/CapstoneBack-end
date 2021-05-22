@@ -61,9 +61,13 @@ exports.login = async (req, res) => {
     }
     if (user) {
       if (user.authenticate(password)) {
-        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
-          expiresIn: "1h",
-        });
+        const token = jwt.sign(
+          { _id: user._id },
+          process.env.SECRET_KEY_DOCTOR,
+          {
+            expiresIn: "1h",
+          }
+        );
         const { _id, email, name } = user;
         res.status(200).json({ token, _id, email, name });
       } else {

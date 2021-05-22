@@ -4,7 +4,7 @@ const User = require("../model/userAuth.model");
 exports.requireSigninAdmin = (req, res, next) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
-    const admin = jwt.verify(token, process.env.SECRET_KEY);
+    const admin = jwt.verify(token, process.env.SECRET_KEY_ADMIN);
     req.user = admin;
     console.log("admin .......", admin);
   } else {
@@ -28,7 +28,7 @@ exports.requireSignin = (req, res, next) => {
 exports.requireSigninDoctor = (req, res, next) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
-    const doctor = jwt.verify(token, process.env.SECRET_KEY);
+    const doctor = jwt.verify(token, process.env.SECRET_KEY_DOCTOR);
     req.doctor = doctor;
     console.log("doctor .......", doctor);
   } else {

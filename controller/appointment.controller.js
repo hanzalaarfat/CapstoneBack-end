@@ -5,11 +5,13 @@ console.log(Appointment);
 const dotenv = require("dotenv");
 dotenv.config();
 const Vonage = require("@vonage/server-sdk"); // for send messaging
+const fast2sms = require("fast-two-sms");
+
 (exports.all = (req, res) => {
   // Returns all appointments
   Appointment.find({}).exec((err, appointments) => res.json(appointments));
 }),
-  (exports.create = (req, res) => {
+  (exports.createAppoitnment = (req, res) => {
     var requestBody = req.body;
 
     var newslot = new Slot({
@@ -25,16 +27,16 @@ const Vonage = require("@vonage/server-sdk"); // for send messaging
       phone: requestBody.phone,
       slots: newslot._id,
     });
-    const vonage = new Vonage({
-      apiKey: process.env.apiKey,
-      apiSecret: process.env.apiSecret,
-    });
-    let msg =
-      requestBody.name +
-      " " +
-      "this message is to confirm your appointment at" +
-      " " +
-      requestBody.appointment;
+    // const vonage = new Vonage({
+    //   apiKey: process.env.apiKey,
+    //   apiSecret: process.env.apiSecret,
+    // });
+    // let msg =
+    //   requestBody.name +
+    //   " " +
+    //   "this message is to confirm your appointment at" +
+    //   " " +
+    //   requestBody.appointment;
     // and saves the record to
     // the data base
     newappointment.save((err, saved) => {
@@ -43,15 +45,25 @@ const Vonage = require("@vonage/server-sdk"); // for send messaging
       Appointment.find({ _id: saved._id })
         .populate("slots")
         .exec((err, appointment) => res.json(appointment));
-      const from = "VIRTUAL_NUMBER";
-      const to = requestBody.phone;
-      vonage.message.sendSms(from, to, msg, (err, responseData) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.dir(responseData);
-        }
-      });
+      // const from = "VIRTUAL_NUMBER";
+      // const to = requestBody.phone;
+      //  vonage.message.sendSms(from, to, msg, (err, responseData) => {
+      //   if (err) {
+      //     console.log(err);
+      //   } else {
+      //     console.dir(responseData);
+      //   }
+      // });
+      var options = {
+        authorization: process.env.YOUR_API_KEY,
+        message: "YOUR_Appoitntment Successfull",
+        numbers: [requestBody.phone],
+      };
+
+      async function smsSend(options) {
+        const response = await fast2sms.sendMessage(options);
+        console.log(response);
+      }
     });
   });
 
