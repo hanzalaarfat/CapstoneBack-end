@@ -14,6 +14,7 @@ const doctorSchema = new mongoose.Schema(
     },
     available: {
       type: Boolean,
+      default: false,
       // required: true,
     },
     timing: {

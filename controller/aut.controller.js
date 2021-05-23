@@ -180,3 +180,43 @@ exports.getBySlug = (req, res) => {
       }
     });
 };
+
+exports.DoctorStatus = async (req, res) => {
+  const id = req.body.id;
+  let bol = req.body.bol;
+  const story = await Doctor.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        available: bol,
+      },
+    },
+    { new: true }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({ message: result });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(400).json({ error: e });
+    });
+};
+
+/////////// available doctor ///////
+
+exports.getAvailableDoctor = async (req, res) => {
+  try {
+    const doctors = await Doctor.find({ available: true });
+    if (doctors) {
+      // console.log("doctor count :", doctors.length);
+      let totalDoctor = doctors.length;
+      res.status(200).json({ totalDoctor: totalDoctor, details: doctors });
+    } else {
+      res.status(401).json({ err: "Not Fount doctor list" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};

@@ -27,5 +27,11 @@ router.post(
 router.post("/update", requireSigninDoctor, doctorAutcontroller.updateProfile);
 router.get("/alldoctor", requireSigninDoctor, doctorAutcontroller.getAllDoctor);
 router.get("/doctor/:slug", doctorAutcontroller.getBySlug);
+router.post("/status", requireSigninDoctor, doctorAutcontroller.DoctorStatus);
+router.get(
+  "/available",
+  requireSigninDoctor,
+  doctorAutcontroller.getAvailableDoctor
+);
 
 module.exports = router;

@@ -10,6 +10,7 @@ const appointmentRoutes = require("./router/appointment.route");
 const Drcategory = require("./router/DrCategoryRoute");
 const adminRoutes = require("./router/adminRoute");
 const hospitalRoutes = require("./router/hospitalRoute");
+const donateRoutes = require("./router/donateRoute");
 const cookieparser = require("cookie-parser");
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/appointment", appointmentRoutes);
 app.use("/category", Drcategory);
 app.use("/hospital", hospitalRoutes);
 app.use("/admin", adminRoutes);
+app.use("/donate", donateRoutes);
 
 app.use(function (req, res, next) {
   var err = new Error("Not Found");
