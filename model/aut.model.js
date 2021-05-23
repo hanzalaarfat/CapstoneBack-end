@@ -63,9 +63,11 @@ const doctorSchema = new mongoose.Schema(
       },
     ],
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Drcategory",
-      required: true,
+      // type: mongoose.Schema.Types.ObjectId,
+      // ref: "Drcategory",
+      type: String,
+      trim: true,
+      // required: true,
     },
   },
 
