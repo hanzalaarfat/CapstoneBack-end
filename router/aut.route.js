@@ -34,4 +34,10 @@ router.get(
   doctorAutcontroller.getAvailableDoctor
 );
 
+// router.post(
+//   "/special",
+//   requireSigninDoctor,
+//   doctorAutcontroller.getSpecialistDoctor
+// );
+
 module.exports = router;

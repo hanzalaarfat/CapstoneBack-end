@@ -9,14 +9,18 @@ const Schema = mongoose.Schema,
 // });
 // const Slot = model("Slot", slotSchema);
 // module.exports = Slot;
-const appointmentSchema = new Schema({
-  id: ObjectId,
-  name: String,
-  email: String,
-  phone: Number,
-  slots: { type: ObjectId, ref: "Slot" },
-  created_at: Date,
-}, { timestamps: true }
+const appointmentSchema = new Schema(
+  {
+    drId: ObjectId,
+    userId: ObjectId,
+    name: String,
+    email: String,
+    phone: Number,
+    date: String,
+    // slots: { type: ObjectId, ref: "Slot" },
+    created_at: Date,
+  },
+  { timestamps: true }
 );
 const Appointment = model("Appointment", appointmentSchema);
 module.exports = Appointment;

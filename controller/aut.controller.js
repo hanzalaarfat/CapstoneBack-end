@@ -37,7 +37,7 @@ exports.signup = (req, res) => {
         });
       }
       if (data) {
-        return res.status(201).json({
+        return res.status(200).json({
           user: data,
         });
       }
@@ -65,13 +65,13 @@ exports.login = async (req, res) => {
           { _id: user._id },
           process.env.SECRET_KEY_DOCTOR,
           {
-            expiresIn: "1h",
+            expiresIn: "24h",
           }
         );
         const { _id, email, name } = user;
         res.status(200).json({ token, _id, email, name });
       } else {
-        return res.status(401).json({
+        return res.status(400).json({
           message: "incoreet usr or email",
         });
       }
@@ -145,6 +145,8 @@ exports.updateProfile = async (req, res) => {
     });
 };
 
+///////////////// listing of all Doctors ///////////
+
 exports.getAllDoctor = async (req, res) => {
   try {
     const doctors = await Doctor.find({});
@@ -159,6 +161,8 @@ exports.getAllDoctor = async (req, res) => {
     console.log(err);
   }
 };
+
+/////////////////     ///////////
 
 exports.getBySlug = (req, res) => {
   const { slug } = req.params;
@@ -180,6 +184,8 @@ exports.getBySlug = (req, res) => {
       }
     });
 };
+
+/////////////////doctor status updates ///////////
 
 exports.DoctorStatus = async (req, res) => {
   const id = req.body.id;
@@ -220,3 +226,22 @@ exports.getAvailableDoctor = async (req, res) => {
     console.log(err);
   }
 };
+
+//////////////doctor searh by specialist //////
+
+// exports.getSpecialistDoctor = async (req, res) => {
+//   let specialist = req.body.specialist;
+//   console.log(specialist);
+//   try {
+//     const doctors = await Doctor.find({ specialist: specialist });
+//     if (doctors) {
+//       // console.log("doctor count :", doctors.length);
+//       let totalDoctor = doctors.length;
+//       res.status(200).json({ totalDoctor: totalDoctor, details: doctors });
+//     } else {
+//       res.status(401).json({ err: "Not Fount doctor list" });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
