@@ -17,6 +17,7 @@ const appointmentSchema = new Schema(
     email: String,
     phone: Number,
     date: String,
+    aptoken: Number,
     // slots: { type: ObjectId, ref: "Slot" },
     created_at: Date,
   },

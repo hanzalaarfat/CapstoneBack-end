@@ -43,6 +43,9 @@ exports.createAppoitnment = (req, res) => {
     email: requestBody.email,
     phone: requestBody.phone,
     date: currentDate,
+    aptoken: (Math.floor(Math.random() * 10000) + 10000)
+      .toString()
+      .substring(1),
     // slots: newslot._id,
   });
   const vonage = new Vonage({
@@ -59,7 +62,7 @@ exports.createAppoitnment = (req, res) => {
 
     if (data) {
       /// this message will be to user with doctor detaials
-      msg = `${requestBody.name} This message is to confirm your appointment with Dr. ${data.name} Consulting Timings : ${data.timing}`;
+      msg = `${requestBody.name} This message is to confirm your appointment with Dr.${data.name},Consulting Timings:${data.timing}and your Token No.:${newappointment.aptoken}`;
       console.log(msg);
     }
   });

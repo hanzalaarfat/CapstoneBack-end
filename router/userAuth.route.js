@@ -29,6 +29,7 @@ router.get("/alluser", userAutcontroller.getallUser);
 router.post("/update", requireSignin, userAutcontroller.updateProfile);
 router.get("/:id/edit", requireSignin, userAutcontroller.edit);
 router.get("/available", requireSignin, doctorAutcontroller.getAvailableDoctor);
+router.get("/alldoctor", requireSignin, doctorAutcontroller.getAllDoctor);
 
 // router.post("/special", requireSignin, doctorAutcontroller.getSpecialistDoctor);
 module.exports = router;
