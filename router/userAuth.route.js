@@ -2,6 +2,7 @@ const exprss = require("express");
 const router = exprss.Router();
 const userAutcontroller = require("../controller/userAut.controller");
 const doctorAutcontroller = require("../controller/aut.controller");
+const hospitalController = require("../controller/hospitalConroller");
 
 // const authenticate = require("../middleware/authenticate");
 
@@ -30,6 +31,7 @@ router.post("/update", requireSignin, userAutcontroller.updateProfile);
 router.get("/:id/edit", requireSignin, userAutcontroller.edit);
 router.get("/available", requireSignin, doctorAutcontroller.getAvailableDoctor);
 router.get("/alldoctor", requireSignin, doctorAutcontroller.getAllDoctor);
+router.get("/allhospital", requireSignin, hospitalController.getAllHospital);
 
 // router.post("/special", requireSignin, doctorAutcontroller.getSpecialistDoctor);
 module.exports = router;
