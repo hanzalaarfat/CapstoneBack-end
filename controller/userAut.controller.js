@@ -99,7 +99,7 @@ exports.login = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   const { phone, state, city, address, id, name } = req.body;
-  const story = await Doctor.findOneAndUpdate(
+  const story = await User.findOneAndUpdate(
     { _id: id },
     {
       $set: {
