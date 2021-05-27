@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const DonateOrg = require("../model/donateModel");
 const GetDonate = require("../model/getdonationModel");
+const dotenv = require("dotenv");
+dotenv.config();
 
 let startDate = new Date();
 const months = [
@@ -136,6 +138,7 @@ exports.ReciveDonateInPostReq = (req, res) => {
       //   data: data,
       // });
       ///add amount  draised  field in  DonateOrg model
+      console.log("Amount type", typeof amount);
       try {
         const data = await DonateOrg.findOne({ _id: orgId });
         if (data) {

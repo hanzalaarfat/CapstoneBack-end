@@ -98,11 +98,12 @@ exports.login = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  const { phone, state, city, address, id } = req.body;
+  const { phone, state, city, address, id, name } = req.body;
   const story = await Doctor.findOneAndUpdate(
     { _id: id },
     {
       $set: {
+        name: name,
         phone: phone,
         city: city,
         state: state,
@@ -122,9 +123,13 @@ exports.updateProfile = async (req, res) => {
     });
 };
 
-exports.edit = (req, res) => {
-  User.findById(req.params.id).then((user) => {
-    res.json(user);
+exports.singleUserData = (req, res) => {
+  User.findOne({ _id: req.params.userId }).exec((err, user) => {
+    if (err) {
+      return res.status(400).json({ err });
+    }
+
+    res.status(200).json({ data: user });
   });
 };
 
