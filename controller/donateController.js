@@ -113,6 +113,7 @@ exports.ReciveDonateInPostReq = (req, res) => {
   if (!name || !email || !phone || !amount) {
     return res.status(422).json({ err: "plz filled properly" });
   }
+  let draised = 0;
   // var requestBody = req.body;
   var getdonation = new GetDonate({
     orgId,
@@ -123,7 +124,7 @@ exports.ReciveDonateInPostReq = (req, res) => {
     date: currentDate,
     amount,
   });
-  getdonation.save((error, data) => {
+  getdonation.save(async (error, data) => {
     if (error) {
       return res.status(400).json({
         message: "Something went wrong ",
@@ -131,9 +132,41 @@ exports.ReciveDonateInPostReq = (req, res) => {
       });
     }
     if (data) {
-      return res.status(200).json({
-        data: data,
-      });
+      // return res.status(200).json({
+      //   data: data,
+      // });
+      ///add amount  draised  field in  DonateOrg model
+      try {
+        const data = await DonateOrg.findOne({ _id: orgId });
+        if (data) {
+          console.log(data.draised);
+          deraisd = data.draised + amount;
+          console.log(draised);
+          const story = await DonateOrg.findOneAndUpdate(
+            { _id: orgId },
+            {
+              $set: {
+                draised: deraisd,
+              },
+            },
+            { new: true }
+          )
+            .exec()
+            .then((result) => {
+              console.log(result);
+              res.status(200).json({ data: result });
+            })
+            .catch((e) => {
+              console.log(e);
+              res.status(400).json({ error: e });
+            });
+        } else {
+          res.status(401).json({ err: "Not Found data" });
+        }
+      } catch (err) {
+        console.log(err);
+        res.status(401).json({ err: "Not Found data" });
+      }
     }
   });
 };
@@ -174,40 +207,40 @@ exports.getAllDonateOrgWiseDetails = async (req, res) => {
 
 //////////////// update raised amount donate org model me///////
 
-exports.addamount = async (req, res) => {
-  const { orgId, amount } = req.body;
-  let draised = 0;
-  console.log(amount);
+// exports.addamount = async (req, res) => {
+//   const { orgId, amount } = req.body;
+//   let draised = 0;
+//   console.log(amount);
 
-  try {
-    const data = await DonateOrg.findOne({ _id: orgId });
-    if (data) {
-      console.log(data.draised);
-      deraisd = data.draised + amount;
-      console.log(draised);
-      const story = await DonateOrg.findOneAndUpdate(
-        { _id: orgId },
-        {
-          $set: {
-            draised: deraisd,
-          },
-        },
-        { new: true }
-      )
-        .exec()
-        .then((result) => {
-          console.log(result);
-          res.status(200).json({ data: result });
-        })
-        .catch((e) => {
-          console.log(e);
-          res.status(400).json({ error: e });
-        });
-    } else {
-      res.status(401).json({ err: "Not Found data" });
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(401).json({ err: "Not Found data" });
-  }
-};
+//   try {
+//     const data = await DonateOrg.findOne({ _id: orgId });
+//     if (data) {
+//       console.log(data.draised);
+//       deraisd = data.draised + amount;
+//       console.log(draised);
+//       const story = await DonateOrg.findOneAndUpdate(
+//         { _id: orgId },
+//         {
+//           $set: {
+//             draised: deraisd,
+//           },
+//         },
+//         { new: true }
+//       )
+//         .exec()
+//         .then((result) => {
+//           console.log(result);
+//           res.status(200).json({ data: result });
+//         })
+//         .catch((e) => {
+//           console.log(e);
+//           res.status(400).json({ error: e });
+//         });
+//     } else {
+//       res.status(401).json({ err: "Not Found data" });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(401).json({ err: "Not Found data" });
+//   }
+// };
