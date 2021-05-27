@@ -109,6 +109,7 @@ exports.emergency = async (req, res) => {
 
 exports.ReciveDonateInPostReq = (req, res) => {
   const { name, orgId, userId, email, phone, amount } = req.body;
+  console.log(orgId);
   if (!name || !email || !phone || !amount) {
     return res.status(422).json({ err: "plz filled properly" });
   }
@@ -142,7 +143,24 @@ exports.ReciveDonateInPostReq = (req, res) => {
 exports.getSingleOrgDetails = async (req, res) => {
   const orgId = req.body.orgId;
   try {
-    const data = await DonateOrg.findOne({ _id: orgId });
+    const data = await DonateOrg.find({ _id: orgId });
+    if (data) {
+      res.status(200).json({ data });
+    } else {
+      res.status(401).json({ err: "Not Found data" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ err: "Not Found data" });
+  }
+};
+
+////////////////////
+
+exports.getAllDonateOrgWiseDetails = async (req, res) => {
+  const orgId = req.body.orgId;
+  try {
+    const data = await GetDonate.find({});
     if (data) {
       res.status(200).json({ data });
     } else {

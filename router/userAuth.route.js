@@ -33,6 +33,10 @@ router.get("/available", requireSignin, doctorAutcontroller.getAvailableDoctor);
 router.get("/alldoctor", requireSignin, doctorAutcontroller.getAllDoctor);
 router.get("/allhospital", requireSignin, hospitalController.getAllHospital);
 router.post("/donate", requireSignin, donateController.ReciveDonateInPostReq);
-
+router.get(
+  "/amount",
+  requireSignin,
+  donateController.getAllDonateOrgWiseDetails
+);
 // router.post("/special", requireSignin, doctorAutcontroller.getSpecialistDoctor);
 module.exports = router;
