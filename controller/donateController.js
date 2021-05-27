@@ -1,6 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const DonateOrg = require("../model/donateModel");
+const GetDonate = require("../model/getdonationModel");
+
+let startDate = new Date();
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const day = startDate.getDate();
+const month = months[startDate.getMonth()]; // 0 to 11 index
+const month1 = startDate.getMonth();
+const year = startDate.getFullYear();
+const fullDate = day + " " + month + " " + year;
+const currentDate = month1 + 1 + "/" + day + "/" + year;
 
 exports.addDonateOrg = (req, res) => {
   DonateOrg.findOne({ orgName: req.body.orgName }).exec((error, org) => {
@@ -35,6 +58,8 @@ exports.addDonateOrg = (req, res) => {
   });
 };
 
+//////////////// get all organization Name /////////////////
+
 exports.getAllOrg = async (req, res) => {
   try {
     const donateorg = await DonateOrg.find({});
@@ -46,5 +71,85 @@ exports.getAllOrg = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+exports.emergency = async (req, res) => {
+  const { emergency, bank, ac, ifsc, drequired, draised, orgName } = req.body;
+
+  if (!emergency || !bank || !ac || !drequired || !draised || !orgName) {
+    return res.status(422).json({ err: "plz fill data properly" });
+  }
+  const story = await DonateOrg.findOneAndUpdate(
+    { orgName: orgName },
+    {
+      $set: {
+        emergency: emergency,
+        bank: bank,
+        ac: ac,
+        ifsc: ifsc,
+        drequired: drequired,
+        draised: draised,
+      },
+    },
+    { new: true }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({ data: result });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(400).json({ error: e });
+    });
+};
+
+///////////////////////////// recivee donate from user post request /////////////////////
+
+exports.ReciveDonateInPostReq = (req, res) => {
+  const { name, orgId, userId, email, phone, amount } = req.body;
+  if (!name || !email || !phone || !amount) {
+    return res.status(422).json({ err: "plz filled properly" });
+  }
+  // var requestBody = req.body;
+  var getdonation = new GetDonate({
+    orgId,
+    userId,
+    name,
+    email,
+    phone,
+    date: currentDate,
+    amount,
+  });
+  getdonation.save((error, data) => {
+    if (error) {
+      return res.status(400).json({
+        message: "Something went wrong ",
+        error,
+      });
+    }
+    if (data) {
+      return res.status(200).json({
+        data: data,
+      });
+    }
+  });
+};
+
+///////////////////////// show sigle Orgnizatin delatils//////////////////
+
+exports.getSingleOrgDetails = async (req, res) => {
+  const orgId = req.body.orgId;
+  try {
+    const data = await DonateOrg.findOne({ _id: orgId });
+    if (data) {
+      res.status(200).json({ data });
+    } else {
+      res.status(401).json({ err: "Not Found data" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ err: "Not Found data" });
   }
 };

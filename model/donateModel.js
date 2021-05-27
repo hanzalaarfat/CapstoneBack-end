@@ -32,12 +32,30 @@ const DonateSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    updates: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
+    bank: {
+      type: String,
+      trim: true,
+    },
+    ac: {
+      type: String,
+      trim: true,
+    },
+    ifsc: {
+      type: String,
+      trim: true,
+    },
+    drequired: {
+      type: String,
+      trim: true,
+    },
+    draised: {
+      type: String,
+      trim: true,
+    },
+    emergency: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );
