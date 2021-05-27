@@ -124,12 +124,13 @@ exports.updateProfile = async (req, res) => {
 };
 
 exports.singleUserData = (req, res) => {
-  User.findOne({ _id: req.params.userId }).exec((err, user) => {
+  console.log(req.params.id);
+  User.findOne({ _id: req.params.id }).exec((err, user) => {
     if (err) {
       return res.status(400).json({ err });
+    } else {
+      res.status(200).json({ data: user });
     }
-
-    res.status(200).json({ data: user });
   });
 };
 
