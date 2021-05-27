@@ -171,3 +171,43 @@ exports.getAllDonateOrgWiseDetails = async (req, res) => {
     res.status(401).json({ err: "Not Found data" });
   }
 };
+
+//////////////// update raised amount donate org model me///////
+
+exports.addamount = async (req, res) => {
+  const { orgId, amount } = req.body;
+  let draised = 0;
+  console.log(amount);
+
+  try {
+    const data = await DonateOrg.findOne({ _id: orgId });
+    if (data) {
+      console.log(data.draised);
+      deraisd = data.draised + amount;
+      console.log(draised);
+      const story = await DonateOrg.findOneAndUpdate(
+        { _id: orgId },
+        {
+          $set: {
+            draised: deraisd,
+          },
+        },
+        { new: true }
+      )
+        .exec()
+        .then((result) => {
+          console.log(result);
+          res.status(200).json({ data: result });
+        })
+        .catch((e) => {
+          console.log(e);
+          res.status(400).json({ error: e });
+        });
+    } else {
+      res.status(401).json({ err: "Not Found data" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ err: "Not Found data" });
+  }
+};

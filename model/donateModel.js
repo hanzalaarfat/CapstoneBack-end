@@ -45,11 +45,13 @@ const DonateSchema = new mongoose.Schema(
       trim: true,
     },
     drequired: {
-      type: String,
+      type: Number,
+      default: 0,
       trim: true,
     },
     draised: {
-      type: String,
+      type: Number,
+      default: 0,
       trim: true,
     },
     emergency: {
