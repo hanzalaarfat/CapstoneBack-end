@@ -42,6 +42,8 @@ exports.createAppoitnment = (req, res) => {
     name: requestBody.name,
     email: requestBody.email,
     phone: requestBody.phone,
+    // prescription: prescription,
+    // medicine: requestBody.medicine,
     date: currentDate,
     aptoken: (Math.floor(Math.random() * 10000) + 10000)
       .toString()

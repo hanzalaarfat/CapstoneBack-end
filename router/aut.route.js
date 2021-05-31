@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const storage = require("../middleware/storage");
+
 const doctorAutcontroller = require("../controller/aut.controller");
 const {
   requireSigninDoctor,
@@ -28,6 +30,12 @@ router.post("/update", requireSigninDoctor, doctorAutcontroller.updateProfile);
 router.get("/alldoctor", requireSigninDoctor, doctorAutcontroller.getAllDoctor);
 router.get("/doctor/:slug", doctorAutcontroller.getBySlug);
 router.post("/status", requireSigninDoctor, doctorAutcontroller.DoctorStatus);
+router.post(
+  "/addprescription",
+  storage.uploadS3.array("prescription"),
+  requireSigninDoctor,
+  doctorAutcontroller.DoctorAddPrecription
+);
 router.get(
   "/available",
   requireSigninDoctor,

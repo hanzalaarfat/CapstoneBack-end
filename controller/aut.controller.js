@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Doctor = require("../model/aut.model");
+const Appointment = require("../model/appointment.model");
 
 const Drcategory = require("../model/drCategoryModel");
 const slugify = require("slugify");
@@ -109,16 +110,8 @@ exports.login = async (req, res) => {
 ///////////////////////////////// doctor Update Profile  /////////
 
 exports.updateProfile = async (req, res) => {
-  const {
-    phone,
-    specialist,
-    state,
-    city,
-    address,
-    days,
-    timing,
-    id,
-  } = req.body;
+  const { phone, specialist, state, city, address, days, timing, id } =
+    req.body;
   const story = await Doctor.findOneAndUpdate(
     { _id: id },
     {
@@ -225,6 +218,43 @@ exports.getAvailableDoctor = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+/////////////////// add prescription into paitinece /////////
+
+exports.DoctorAddPrecription = async (req, res) => {
+  let prescription = [];
+
+  if (req.files.length > 0) {
+    prescription = req.files.map((file) => {
+      return { img: file.location };
+    });
+  }
+
+  let id = req.body.id;
+
+  console.log(id);
+
+  await Appointment.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        prescription: prescription,
+        name: req.body.name,
+      },
+    },
+    { new: true }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({ message: result });
+      // res.status(201).json({ Result: result, files: req.files });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(400).json({ error: e });
+    });
 };
 
 //////////////doctor searh by specialist //////

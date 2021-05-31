@@ -18,7 +18,8 @@ const appointmentSchema = new Schema(
     phone: Number,
     date: String,
     aptoken: Number,
-    // slots: { type: ObjectId, ref: "Slot" },
+    prescription: [{ img: { type: String } }],
+    medicine: [String],
     created_at: Date,
   },
   { timestamps: true }
