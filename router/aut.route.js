@@ -46,6 +46,11 @@ router.get(
   requireSigninDoctor,
   doctorAutcontroller.getAvailableDoctor
 );
+router.get(
+  "/search/:specialist",
+  requireSigninDoctor,
+  doctorAutcontroller.getSearchDoctor
+);
 
 // router.post(
 //   "/special",

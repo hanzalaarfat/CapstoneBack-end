@@ -155,6 +155,26 @@ exports.getAllDoctor = async (req, res) => {
   }
 };
 
+///////////////// Search Doctor by special list    ///////////
+
+exports.getSearchDoctor = async (req, res) => {
+  const specialist = req.params.specialist;
+  console.log(specialist);
+  const regex = new RegExp(specialist, "i");
+  console.log(regex);
+  try {
+    const doctors = await Doctor.find({ specialist: regex });
+    if (doctors.length > 0) {
+      res.status(200).json({ data: doctors });
+    } else {
+      res.status(401).json({ message: "Not Fount doctor list" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ err: "Not Fount doctor list" });
+  }
+};
+
 /////////////////     ///////////
 
 exports.getBySlug = (req, res) => {
