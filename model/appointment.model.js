@@ -18,7 +18,7 @@ const appointmentSchema = new Schema(
     phone: Number,
     date: String,
     aptoken: Number,
-    prescription: [{ img: { type: String } }],
+    prescription: [{ img: { type: String }, update: { type: String } }],
     medicine: [String],
     created_at: Date,
   },

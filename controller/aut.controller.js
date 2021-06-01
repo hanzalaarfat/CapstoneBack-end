@@ -223,6 +223,17 @@ exports.getAvailableDoctor = async (req, res) => {
 /////////////////// add prescription into paitinece /////////
 
 exports.DoctorAddPrecription = async (req, res) => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + "/" + dd + "/" + yyyy;
+
+  let date = [today];
+  console.log(date);
+  console.log(today);
+  let apt_id = req.body.id;
   let prescription = [];
 
   if (req.files.length > 0) {
@@ -231,16 +242,15 @@ exports.DoctorAddPrecription = async (req, res) => {
     });
   }
 
-  let id = req.body.id;
-
-  console.log(id);
+  console.log(apt_id);
+  console.log(prescription);
 
   await Appointment.findOneAndUpdate(
-    { _id: id },
+    { _id: apt_id },
     {
-      $set: {
+      $push: {
         prescription: prescription,
-        name: req.body.name,
+        //  update: today, //not update date
       },
     },
     { new: true }
@@ -255,6 +265,20 @@ exports.DoctorAddPrecription = async (req, res) => {
       console.log(e);
       res.status(400).json({ error: e });
     });
+};
+
+exports.DoctorGetPrecription = async (req, res) => {
+  let id = req.params.id;
+  try {
+    let prescriptions = await Appointment.find({ userId: id });
+    if (prescriptions) {
+      res.status(200).json({ data: prescriptions });
+    } else {
+      res.status(400).json({ error: "No prescriptions Found" });
+    }
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
 };
 
 //////////////doctor searh by specialist //////

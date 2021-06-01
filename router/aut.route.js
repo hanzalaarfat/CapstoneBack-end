@@ -37,6 +37,11 @@ router.post(
   doctorAutcontroller.DoctorAddPrecription
 );
 router.get(
+  "/getprescription/:id",
+  requireSigninDoctor,
+  doctorAutcontroller.DoctorGetPrecription
+);
+router.get(
   "/available",
   requireSigninDoctor,
   doctorAutcontroller.getAvailableDoctor
