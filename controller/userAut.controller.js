@@ -142,17 +142,3 @@ exports.getallUser = async (req, res) => {
     console.log(err);
   }
 };
-
-// exports.getAllUser = async (req, res) => {
-//   try {
-//     const user = await User.find({});
-//     if (user) {
-//       let totalUser = user.length;
-//       res.status(200).json({ totalUser, user });
-//     } else {
-//       res.status(401).json({ err: "Not Fount Hospital list" });
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };

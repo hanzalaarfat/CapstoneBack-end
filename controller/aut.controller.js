@@ -20,11 +20,12 @@ exports.signup = (req, res) => {
       return res.status(400).json({
         message: "User already registered",
       });
+
     const { name, email, password, category } = req.body;
 
     const doctor = new Doctor({
       name,
-      slug: slugify(name),
+      // slug: slugify(name),
       email,
       password,
       category,
@@ -49,8 +50,6 @@ exports.signup = (req, res) => {
 /////////////////// login ///////////
 
 exports.login = async (req, res) => {
-  let token;
-
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(422).json({ err: "plz fill data properly" });

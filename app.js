@@ -40,6 +40,6 @@ app.use(function (req, res, next) {
   err.status = 404;
   next(err);
 });
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log(`sarver started at port ${process.env.PORT} `);
 });
