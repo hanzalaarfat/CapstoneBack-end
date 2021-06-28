@@ -24,7 +24,7 @@ app.use(cors());
 
 app.get("/", (req, res) => {
   console.log(req.user);
-  res.send("hello world");
+  res.send("Health Care Api");
 });
 app.use("/doctor", doctorRoutes);
 app.use("/user", userRoutes);
